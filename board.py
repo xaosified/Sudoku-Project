@@ -7,7 +7,7 @@ class SudokuGenerator:
 	    #Constructor for the SudokuGenerator class.
 	    #For the purposes of this project, row_length is always 9
 	    #removed_cells could vary depending on the difficulty level chosen. (see “UI Requirements”).
-
+    
     def get_board(self):
         #Returns a 2D python list of numbers, which represents the board
 
@@ -91,8 +91,8 @@ class Cell:
 
 class Board:
     def __init__(self, width, height, screen, difficulty):
-        Constructor for the Board class. screen is a
-        window from PyGame. difficulty is a variable to indicate if the user chose easy medium, or hard.
+        #onstructor for the Board class. screen is a
+        #window from PyGame. difficulty is a variable to indicate if the user chose easy medium, or hard.
 
     def draw(self):
     	#Draws an outline of the Sudoku grid, with bold lines to delineate the 3x3 boxes.
