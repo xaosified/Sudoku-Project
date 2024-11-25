@@ -37,7 +37,7 @@ class SudokuGenerator:
 	Return: list[list]
     '''
     def get_board(self):
-        pass
+        return [[0 for i in range(self.row_length)] for j in range(self.row_length)]
 
     '''
 	Displays the board to the console
@@ -47,7 +47,10 @@ class SudokuGenerator:
 	Return: None
     '''
     def print_board(self):
-        pass
+        for i in range(len(self.board)-1):
+            for j in range(len(self.board[i])):
+                print(self.board[i][j], end=' ')
+            print()
 
     '''
 	Determines if num is contained in the specified row (horizontal) of the board
@@ -60,7 +63,10 @@ class SudokuGenerator:
 	Return: boolean
     '''
     def valid_in_row(self, row, num):
-        pass
+        if num in self.board[row]:
+            return False
+        else:
+            return True
 
     '''
 	Determines if num is contained in the specified column (vertical) of the board
@@ -73,7 +79,10 @@ class SudokuGenerator:
 	Return: boolean
     '''
     def valid_in_col(self, col, num):
-        pass
+        for i in range(len(self.board[0][0])):
+            if num == self.board[i][col]:
+                return False
+        return True
 
     '''
 	Determines if num is contained in the 3x3 box specified on the board
@@ -88,7 +97,12 @@ class SudokuGenerator:
 	Return: boolean
     '''
     def valid_in_box(self, row_start, col_start, num):
-        pass
+        #tested and works
+        for i in range(3):
+            for j in range(3):
+                if num == self.board[row_start + i][col_start + j]:
+                    return False
+        return True
     
     '''
     Determines if it is valid to enter num at (row, col) in the board
@@ -192,6 +206,88 @@ class SudokuGenerator:
     def remove_cells(self):
         pass
 
+class Cell:
+
+    def __init__(self, value, row, col, screen):
+        #Constructor for the Cell class
+        self.value = value
+        self.row = row
+        self.col = col
+
+    def set_cell_value(self, value):
+        #Setter for this cell’s value
+        pass
+
+    def set_sketched_value(self, value):
+        #Setter for this cell’s sketched value
+        pass
+
+    def draw(self):
+        #Draws this cell, along with the value inside it.
+        #If this cell has a nonzero value, that (value is displayed. Otherwise, no) value is displayed in the cell.
+        #The cell is outlined red if it is currently selected.
+        pass
+
+
+#-------------------------------------------------------------------------------------------------------------
+
+
+class Board:
+    def __init__(self, width, height, screen, difficulty):
+        #onstructor for the Board class. screen is a
+        #window from PyGame. difficulty is a variable to indicate if the user chose easy medium, or hard.
+        pass
+
+    def draw(self):
+    	#Draws an outline of the Sudoku grid, with bold lines to delineate the 3x3 boxes.
+	    #Draws every cell on this board.
+        pass
+
+    def select(self, row, col):
+	    #Marks the cell at (row, col) in the board as the current selected cell.
+	    #Once a cell has been selected, the user can edit its value or sketched value.
+        pass
+
+    def click(self, row, col):
+    	#If a tuple of (x,y) coordinates is within the displayed board,
+        #this function returns a tuple of the (row, col) of the cell which was clicked.
+        #Otherwise, this function returns None.
+        pass
+
+    def clear(self):
+    	#Clears the value cell.
+        #Note that the user can only remove the cell values and sketched values that are filled by themselves.
+        pass
+
+    def sketch(self, value):
+	    #Sets the sketched value of the current selected cell equal to the user entered value.
+	    #It will be displayed at the top left corner of the cell using the draw() function.
+        pass
+
+    def place_number(self, value):
+        #Sets the value of the currrent selected cell equal to the user entered value.
+        #Called when the user presses the enter key
+        pass
+
+    def reset_to_original(self):
+        #Resets all cells in the board to their original values (0 if cleared, otherwise the corresponding digit).
+        pass
+
+    def is_full(self):
+        #Returns a Boolean value indicating whether the board is full or not.
+        pass
+
+    def update_board(self):
+        #Updates the underlying 2D board with the values in all cells.
+        pass
+
+    def find_empty(self):
+        #Finds an empty cell and returns its row and col as a tuple(x, y).
+        pass
+
+    def check_board(self):
+        #Check whether the Sudoku board is solved correctly.
+        pass
 '''
 DO NOT CHANGE
 Provided for students
