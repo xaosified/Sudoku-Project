@@ -2,7 +2,7 @@ import pygame, random, sys
 from sudoku_generator import *
 from Game_Screens import *
 
-WIDTH = 700
+WIDTH = 675
 HEIGHT = 800
 
 
@@ -19,7 +19,7 @@ def main():
         difficulty = start_screen.display() #0 for easy, 1 for medium, 2 for hard
 
         if difficulty is not None:
-            sudoku_board = SudokuBoard(screen)
+            sudoku_board = SudokuBoard(screen, difficulty)
             sudoku_board.display_board()
 
 
