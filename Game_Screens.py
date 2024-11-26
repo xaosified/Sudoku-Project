@@ -7,7 +7,7 @@ from sudoku_generator import *
 pygame.init()
 
 
-WIDTH = 700   #SCREEN DIMENSIONS
+WIDTH = 675   #SCREEN DIMENSIONS
 HEIGHT = 800  #SCREEN DIMENSIONS
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Sudoku!")
@@ -24,7 +24,7 @@ font = pygame.font.Font(None, 60)
 
 #Cell constants
 GRID_SIZE = 9
-CELL_SIZE = 77
+CELL_SIZE = 75
 BACKGROUND_COLOR = (255, 255, 255)
 LINE_COLOR = (0, 0, 0)
 BUTTON_OUTLINE_COLOR = (0, 0, 0)
@@ -105,14 +105,82 @@ class StartScreen:
 
             pygame.display.update()
 
+class Cell:
 
+    def __init__(self, value, row, col, screen):
+        #Constructor for the Cell class
+        self.value = value
+        self.row = row
+        self.col = col
+        self.screen = screen
+
+        self.sketched_value = 0
+        self.is_selected = False
+
+        SKETCH_COLOR = (210, 210, 210) #Grey; for when the number is sketched in the cell
+        COMPLETE_COLOR = (0, 0, 0) #Black; for when the sketch is completely entered in
+        SELECT_COLOR = (204, 0, 0) #Red; colors the outline of the box when selected
+
+
+
+    def set_cell_value(self, value):
+        #Setter for this cell’s value
+        self.value = value
+
+    def set_sketched_value(self, value):
+        #Setter for this cell’s sketched value
+        self.sketched_value = value
+
+    def draw(self):
+        #Draws this cell, along with the value inside it.
+        #If this cell has a nonzero value, that (value is displayed. Otherwise, no) value is displayed in the cell.
+        #The cell is outlined red if it is currently selected.
+        x = self.col * CELL_SIZE
+        y = self.row * CELL_SIZE
+
+        #Need to create the red box around the cell selected and display the number typed in
+
+        pass
 
 class SudokuBoard:
-    def __init__(self, screen):
+    def __init__(self, screen, difficulty):
         self.screen = screen
         self.width = WIDTH
         self.height = HEIGHT
-        self.board = [[0 for i in range(GRID_SIZE)] for _ in range(GRID_SIZE)]  # Initialize a 9x9 grid (empty)
+        #self.board = [[0 for i in range(GRID_SIZE)] for _ in range(GRID_SIZE)]  Initialize a 9x9 grid (empty)
+
+        self.difficulty = difficulty
+        difficulty_rmv = [30, 40, 50] #0 for easy, 1 for medium, 2 for hard; determiend by output of StartScreen class in main
+
+        self.generated_board = generate_sudoku(9, difficulty_rmv[difficulty])
+        self.board = []
+        
+        for row in range(9):
+            rows = []
+            for col in range(9):
+                cell = Cell(self.generated_board[row][col], row, col, screen)
+                rows.append(cell)
+            self.cells.append(rows)
+        
+        self.selected_cell = None
+    
+
+    def select(self, row, col):
+        pass
+
+    def click(self, x, y):
+        #checks if a click on the board is within the bounds of the board
+        if 0 <= x <= 675 and 0 <= y <= 675:
+            col = x // 75
+            row = y // 75
+
+            return (x,y)
+        return None
+
+
+    #The rest of the methods should follow the outline given in board.py
+
+
 
     def draw_grid(self):
         self.screen.fill(BACKGROUND_COLOR)
@@ -175,8 +243,8 @@ class SudokuBoard:
             pygame.display.update()
 
 
-def main_board():
-    sudoku_board = SudokuBoard(screen)
+def main_board(screen, difficulty):
+    sudoku_board = SudokuBoard(screen, difficulty)
     sudoku_board.display_board()
 
 
