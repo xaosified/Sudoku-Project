@@ -13,14 +13,23 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Sudoku!")
 
 
-button_color = (199, 119, 0)   #DARK ORANGE COLOR = USE SAME RGB COLOR MOVING FOAWRD
-text_color = (255, 255, 255)   #WHITE
+BUTTON_COLOR = (199, 119, 0)   #DARK ORANGE COLOR = USE SAME RGB COLOR MOVING FOAWRD
+TEXT_COLOR = (255, 255, 255)   #WHITE
 outline_color = (0, 0, 0)      # BLACK
 title_color = (255, 255, 255)  # WHITE
 BUTTON_WIDTH = 130
 BUTTON_HEIGHT = 50
 title_font = pygame.font.Font(None, 100)
 font = pygame.font.Font(None, 60)
+
+#Cell constants
+GRID_SIZE = 9
+CELL_SIZE = 77
+BACKGROUND_COLOR = (255, 255, 255)
+LINE_COLOR = (0, 0, 0)
+BUTTON_OUTLINE_COLOR = (0, 0, 0)
+BUTTON_FONT = pygame.font.Font(None, 40)
+
 
 #=====  3 classes below =======(start screen, board, end screen)====(start an dend screens are similar)============
 #=======Most work on this file includes adding function to buttons creating a functioning board====================
@@ -31,15 +40,16 @@ class StartScreen:
         self.screen = screen
         self.width = WIDTH
         self.height = HEIGHT
+        self.difficulty = None
 
     def draw_button(self, text, y_pos):
-        text_surface = font.render(text, True, text_color)
+        text_surface = font.render(text, True, TEXT_COLOR)
         text_rect = text_surface.get_rect(center=(self.width // 2, y_pos))  # CENTER TEXT
 
         button_width = text_surface.get_width() + 40
         button_height = text_surface.get_height() + 40
         button_surface = pygame.Surface((button_width, button_height))
-        button_surface.fill(button_color)  #COLOR BUTTON
+        button_surface.fill(BUTTON_COLOR)  #COLOR BUTTON
         pygame.draw.rect(button_surface, outline_color, button_surface.get_rect(), 5)  #OUTLINE BUTTON
 
         self.screen.blit(button_surface,  #DRAW BUTTON
@@ -63,14 +73,21 @@ class StartScreen:
         hard_rect = pygame.Rect(self.width // 2 - 120, self.height // 2 + 60, 240, 120)   #AREAS
 
 
-        if easy_rect.collidepoint(event.pos):  #CHECK IF CLICKED SYSTEM
+        if easy_rect.collidepoint(event.pos):  #CHECK IF CLICKED SYSTEM; update: return boolean for whether anything was clicked or not
             print("Easy Game Selected!")
+            self.difficulty = 0
+            return True
         elif medium_rect.collidepoint(event.pos):
             print("Medium Game Selected!")
+            self.difficulty = 1
+            return True
         elif hard_rect.collidepoint(event.pos):
             print("Hard Game Selected!")
+            self.difficulty = 2
+            return True
+        return False
 
-    def display(self):
+    def display(self): #Edit: now returns difficulty depending on which button was clicked
         while True:  #STARTSCREEN LOOP
             self.screen.fill((255, 200, 150)) #LIGHT ORANGE BACKGROUND COLOR = TO BE USED MOVING FORWARD
             self.draw_title()
@@ -83,7 +100,8 @@ class StartScreen:
                     pygame.quit()
                     sys.exit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    self.handle_click(event)
+                    if self.handle_click(event):
+                        return self.difficulty
 
             pygame.display.update()
 
@@ -94,7 +112,7 @@ class SudokuBoard:
         self.screen = screen
         self.width = WIDTH
         self.height = HEIGHT
-        self.board = [[0] * GRID_SIZE for _ in range(GRID_SIZE)]  # Initialize a 9x9 grid (empty)
+        self.board = [[0 for i in range(GRID_SIZE)] for _ in range(GRID_SIZE)]  # Initialize a 9x9 grid (empty)
 
     def draw_grid(self):
         self.screen.fill(BACKGROUND_COLOR)
@@ -103,13 +121,13 @@ class SudokuBoard:
                 rect = pygame.Rect(col * CELL_SIZE, row * CELL_SIZE, CELL_SIZE, CELL_SIZE)
                 pygame.draw.rect(self.screen, LINE_COLOR, rect, 1)  # THIN LINE
 
-        for row in range(0, GRID_SIZE, 3):  # SUBGRIDS
-            for col in range(0, GRID_SIZE, 3):
+        for row in range(0, 9, 3):  # SUBGRIDS
+            for col in range(0, 9, 3):
                 rect = pygame.Rect(col * CELL_SIZE, row * CELL_SIZE, 3 * CELL_SIZE, 3 * CELL_SIZE)
                 pygame.draw.rect(self.screen, LINE_COLOR, rect, 3)  # THICK LINE
 
     def draw_button(self, text, x_pos, y_pos):
-        text_surface = button_font.render(text, True, TEXT_COLOR)
+        text_surface = BUTTON_FONT.render(text, True, TEXT_COLOR)
         text_rect = text_surface.get_rect(center=(x_pos, y_pos))
         button_surface = pygame.Surface((BUTTON_WIDTH, BUTTON_HEIGHT))
         button_surface.fill(BUTTON_COLOR)
@@ -172,12 +190,12 @@ class EndScreen:
         self.height = HEIGHT
 
     def draw_button(self, text, y_pos):
-        text_surface = font.render(text, True, text_color)
+        text_surface = font.render(text, True, TEXT_COLOR)
         text_rect = text_surface.get_rect(center=(self.width // 2, y_pos))  #CENTER TEXT
         button_width = text_surface.get_width() + 40
         button_height = text_surface.get_height() + 40         #VERY SIMILAR CODE COMPARED TO STARTSCREEN CLASS
         button_surface = pygame.Surface((button_width, button_height))
-        button_surface.fill(button_color)
+        button_surface.fill(BUTTON_COLOR)
         pygame.draw.rect(button_surface, outline_color, button_surface.get_rect(), 5)
         self.screen.blit(button_surface,
                          (self.width // 2 - button_width // 2, y_pos - button_height // 2))
