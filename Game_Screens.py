@@ -153,9 +153,9 @@ class SudokuBoard:
     def display_board(self):
         while True:
             self.draw_grid()
-            self.draw_button("Reset", self.width // 4, self.height - 40)    # RESET
-            self.draw_button("Restart", self.width // 2, self.height - 40)  # RESTART
-            self.draw_button("Exit", self.width * 3 // 4, self.height - 40) # EXIT
+            self.draw_button("Reset", self.width // 4, self.height - 95)    # RESET
+            self.draw_button("Restart", self.width // 2, self.height - 95)  # RESTART
+            self.draw_button("Exit", self.width * 3 // 4, self.height - 95) # EXIT
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
