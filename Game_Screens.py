@@ -157,22 +157,6 @@ class SudokuBoard:
             self.draw_button("Restart", self.width // 2, self.height - 95)  # RESTART
             self.draw_button("Exit", self.width * 3 // 4, self.height - 95) # EXIT
 
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
-
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    action = self.click_button(event)
-                    if action == "reset":
-                        self.reset_board()  #***RESET BORD = ADD FUNCTION TO THIS***
-                    elif action == "restart":
-                        self.reset_board()  #***RESTART GAME = ADD FUNCTION TO THIS***
-                    elif action == "exit":
-                        pygame.quit()
-                        sys.exit()          #IS THIS GOOD? OR DO WE WANT IT TO GO TO THE GAME OVER SCREEN
-            pygame.display.update()
-
 
 def main_board(screen):
     sudoku_board = SudokuBoard(screen)
