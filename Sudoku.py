@@ -23,6 +23,6 @@ def main():
             game_screen = main_board(screen)
 
 
-
-main()
+if __name__ == "__main__":
+    main()
 
