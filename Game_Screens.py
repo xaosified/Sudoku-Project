@@ -135,9 +135,9 @@ class SudokuBoard:
         self.screen.blit(text_surface, text_rect)
 
     def click_button(self, event):
-        reset_rect = pygame.Rect(self.width // 4 - BUTTON_WIDTH // 2, self.height - 70, BUTTON_WIDTH, BUTTON_HEIGHT)
-        restart_rect = pygame.Rect(self.width // 2 - BUTTON_WIDTH // 2, self.height - 70, BUTTON_WIDTH, BUTTON_HEIGHT)
-        exit_rect = pygame.Rect(self.width * 3 // 4 - BUTTON_WIDTH // 2, self.height - 70, BUTTON_WIDTH, BUTTON_HEIGHT)
+        reset_rect = pygame.Rect(self.width // 4 - BUTTON_WIDTH // 2, self.height - 95 - BUTTON_HEIGHT // 2, BUTTON_WIDTH, BUTTON_HEIGHT)
+        restart_rect = pygame.Rect(self.width // 2 - BUTTON_WIDTH // 2, self.height - 95 - BUTTON_HEIGHT // 2, BUTTON_WIDTH, BUTTON_HEIGHT)
+        exit_rect = pygame.Rect(self.width * 3 // 4 - BUTTON_WIDTH // 2, self.height - 95 - BUTTON_HEIGHT // 2, BUTTON_WIDTH, BUTTON_HEIGHT)
         if reset_rect.collidepoint(event.pos):
             print("Resetting")
             return "reset"
