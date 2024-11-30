@@ -106,7 +106,7 @@ class StartScreen:
             pygame.display.update()
 
 
-class SudokuBoard:
+class GameScreen:
     def __init__(self, screen):
         self.screen = screen
         self.width = WIDTH
@@ -146,20 +146,18 @@ class SudokuBoard:
             return "restart"
         elif exit_rect.collidepoint(event.pos):
             print("Exiting")
-            pygame.quit()
-            sys.exit()
+            return "exit"
         return None
 
     def display_board(self):
-        while True:
-            self.draw_grid()
-            self.draw_button("Reset", self.width // 4, self.height - 95)    # RESET
-            self.draw_button("Restart", self.width // 2, self.height - 95)  # RESTART
-            self.draw_button("Exit", self.width * 3 // 4, self.height - 95) # EXIT
+        self.draw_grid()
+        self.draw_button("Reset", self.width // 4, self.height - 95)    # RESET
+        self.draw_button("Restart", self.width // 2, self.height - 95)  # RESTART
+        self.draw_button("Exit", self.width * 3 // 4, self.height - 95) # EXIT
 
 
 def main_board(screen):
-    sudoku_board = SudokuBoard(screen)
+    sudoku_board = GameScreen(screen)
     sudoku_board.display_board()
 
 

@@ -13,7 +13,7 @@ BUTTON_FONT = pygame.font.Font(None, 40)
 SKETCH_COLOR = (210, 210, 210) #Grey; for when the number is sketched in the cell
 COMPLETE_COLOR = (0, 0, 0) #Black; for when the sketch is completely entered in
 SELECT_COLOR = (204, 0, 0) #Red; colors the outline of the box when selected
-COMPLETE_SIZE = pygame.font.Font(None, 40) #size of the number within each cell
+COMPLETE_SIZE = pygame.font.Font(None, 35) #size of the number within each cell
 SKETCH_SIZE = pygame.font.Font(None, 30) #size of sketched number; needs to be in the top left of the cell and smaller
 #Edit: complete and sketch size changed 
 
@@ -45,8 +45,8 @@ class Cell:
         #Draws this cell, along with the value inside it.
         #If this cell has a nonzero value, that (value is displayed. Otherwise, no) value is displayed in the cell.
         #The cell is outlined red if it is currently selected.
-        x = self.col * CELL_SIZE #the (x,y) coords will be at the top left of the cell selected
-        y = self.row * CELL_SIZE
+        x = self.row * CELL_SIZE #the (x,y) coords will be at the top left of the cell selected
+        y = self.col * CELL_SIZE
 
         #Need to create the red box around the cell selected and display the number typed in
         if self.is_selected:
@@ -112,7 +112,7 @@ class Board:
         self.selected_cell = self.board[row][col]
         self.selected_cell.is_selected = True #Board stores Cell classes <=== REMEMBER THIS
 
-        if self.selected_cell.editable: #Only draws if the selected cell is editable
+        if self.selected_cell.editable: #Only draws if the selected cell is editable <== NOT WORKING, please fix
             self.selected_cell.draw()
 
     def click(self, x, y):
@@ -148,7 +148,7 @@ class Board:
     def place_number(self, value):
         #Sets the value of the currrent selected cell equal to the user entered value.
         #Called when the user presses the enter key
-        if self.selected_cell.editable and self.selected_value == 0:
+        if self.selected_cell.editable and self.selected_cell.value == 0:
             self.selected_cell.set_cell_value(value)
             self.board[self.selected_cell.row][self.selected_cell.col].set_cell_value(value)
             self.selected_cell.set_sketched_value(0)
