@@ -13,13 +13,13 @@ BUTTON_FONT = pygame.font.Font(None, 40)
 SKETCH_COLOR = (210, 210, 210) #Grey; for when the number is sketched in the cell
 COMPLETE_COLOR = (0, 0, 0) #Black; for when the sketch is completely entered in
 SELECT_COLOR = (204, 0, 0) #Red; colors the outline of the box when selected
-COMPLETE_SIZE = pygame.font.Font(None, 35) #size of the number within each cell
-SKETCH_SIZE = pygame.font.Font(None, 15) #size of sketched number; needs to be in the top left of the cell and smaller
-
+COMPLETE_SIZE = pygame.font.Font(None, 40) #size of the number within each cell
+SKETCH_SIZE = pygame.font.Font(None, 30) #size of sketched number; needs to be in the top left of the cell and smaller
+#Edit: complete and sketch size changed 
 
 class Cell:
 
-    def __init__(self, editable: bool, value, row, col, screen):
+    def __init__(self, editable, value, row, col, screen):
         #Constructor for the Cell class
         self.value = value
         self.row = row
@@ -56,7 +56,7 @@ class Cell:
 
         if self.value != 0: #value when fully typed in; in black
             num_surface = COMPLETE_SIZE.render(str(self.value), True, COMPLETE_COLOR)
-            self.screen.blit(num_surface, (x + 25, y + 25))
+            self.screen.blit(num_surface, (x + 30, y + 25)) #Edit: x value changed to keep it on center
 
         elif self.sketched_value != 0 and self.value == 0: #value for when the number is sketched; in grey
             sketch_surface = SKETCH_SIZE.render(str(self.sketched_value), True, SKETCH_COLOR)
@@ -75,16 +75,16 @@ class Board:
         self.difficulty = difficulty
         difficulty_rmv = [30, 40, 50] #0 for easy, 1 for medium, 2 for hard; determiend by output of StartScreen class in main
 
-        #self.generated_board = generate_sudoku(9, difficulty_rmv[difficulty]) <== will be the board with each class as an integer
-        self.generated_board = [[3,8,0,4,0,0,1,2,0],
-                                [6,0,0,0,7,5,0,0,9],
-                                [0,0,0,6,0,1,0,7,8],
-                                [0,0,7,0,4,0,2,6,0],
-                                [0,0,1,0,5,0,9,3,0],
-                                [9,0,4,0,6,0,0,0,5],
-                                [0,7,0,3,0,0,0,1,2],
-                                [1,2,0,0,0,7,4,0,0],
-                                [0,4,9,2,0,6,0,0,7]] #test board
+        #self.generated_board = generate_sudoku(9, difficulty_rmv[difficulty]) <== IMPORTANT: will be used as the board
+        self.generated_board = [[5, 3, 4, 6, 7, 8, 9, 1, 2],
+                                [6, 7, 2, 1, 9, 5, 3, 4, 8],
+                                [1, 9, 8, 3, 4, 2, 5, 6, 7],
+                                [8, 5, 9, 7, 6, 1, 4, 2, 3],
+                                [4, 2, 6, 8, 5, 3, 7, 9, 1],
+                                [7, 1, 3, 9, 2, 4, 8, 5, 6],
+                                [9, 6, 1, 5, 3, 7, 2, 8, 4],
+                                [2, 8, 7, 4, 1, 9, 6, 3, 5],
+                                [3, 4, 5, 2, 8, 6, 1, 7, 0]] #test board; all but 1 solved in order to test win and lose screens
         self.board = [] #<== will be the board with each cell being a class
         
         for row in range(9):
@@ -100,15 +100,19 @@ class Board:
         
         self.selected_cell = None
     
-    def draw_cells(self): #Needs to be fixed
+    def draw_cells(self):
         for row in range(9):
             for col in range(9):
                 self.board[row][col].draw()
 
     def select(self, row, col):
-        if self.selected_cell.editable:
-            self.selected_cell = self.board[row][col]
-            self.selected_cell.is_selected = True #Board stores Cell classes <=== REMEMBER THIS
+        if self.selected_cell: #for deselecting the cell
+            self.selected_cell.is_selected = False
+
+        self.selected_cell = self.board[row][col]
+        self.selected_cell.is_selected = True #Board stores Cell classes <=== REMEMBER THIS
+
+        if self.selected_cell.editable: #Only draws if the selected cell is editable
             self.selected_cell.draw()
 
     def click(self, x, y):
@@ -131,7 +135,7 @@ class Board:
             self.selected_cell.set_cell_value(0)
             self.selected_cell.set_sketched_value(0)
             self.board[self.selected_cell.row][self.selected_cell.col].set_cell_value(0)
-            self.selected_cell.draw()
+            self.update_board()
 
 
     def sketch(self, value):
@@ -146,9 +150,9 @@ class Board:
         #Called when the user presses the enter key
         if self.selected_cell.editable and self.selected_value == 0:
             self.selected_cell.set_cell_value(value)
-            self.selected_cell.set_sketched_value(0)
             self.board[self.selected_cell.row][self.selected_cell.col].set_cell_value(value)
-            self.selected_cell.draw()
+            self.selected_cell.set_sketched_value(0)
+            self.update_board()
 
     def reset_to_original(self):
         #Resets all cells in the board to their original values (0 if cleared, otherwise the corresponding digit).
@@ -157,12 +161,14 @@ class Board:
                 if self.board[row][col].editable:
                     self.board[row][col].value = 0
                     self.board[row][col].selected_value = 0
+        self.draw_cells()
+        self.update_board()
 
     def is_full(self):
         #Returns a Boolean value indicating whether the board is full or not.
         for i in range(9):
             for j in range(9):
-                if self.board[i][j] == 0:
+                if self.board[i][j].value == 0:
                     return False
         return True
 
@@ -181,7 +187,6 @@ class Board:
                     y = row * CELL_SIZE
                     return (x, y)
         return None
-        #what does this mean what, why is this needed
 
     def check_board(self):
         #Check whether the Sudoku board is solved correctly.
