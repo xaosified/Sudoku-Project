@@ -78,12 +78,21 @@ class SudokuGenerator:
 	
 	Return: boolean
     '''
+    '''
     def valid_in_col(self, col, num):
         for i in range(len(self.board[0][0])):
             if num == self.board[i][col]:
                 return False
         return True
-
+    '''
+    #To determine if a num is contained in a specified column, we must check all numbers in that column. If the 2D list we are iterating through looks like this:
+    # [[0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0],... then we have to look at element in the same position of each nested list, for example: list[0][0]
+    #and list[1][0]
+    def valid_in_col(self, col, num):
+        for i in range(len(self.board)):    #iterates through the rows: we have to check the element in the same position in each of them
+            if num == self.board[i][col]:   #Checks the element
+                return False
+        return True
     '''
 	Determines if num is contained in the 3x3 box specified on the board
     If num is in the specified box starting at (row_start, col_start), return False.
@@ -114,8 +123,13 @@ class SudokuGenerator:
 
 	Return: boolean
     '''
+
     def is_valid(self, row, col, num):
-        pass
+        box_row_start = (row // 3) * 3  # Finds the first cell in the box
+        box_col_start = (col // 3) * 3
+        if self.valid_in_row(row, num) and self.valid_in_col(col, num) and self.valid_in_box(box_row_start, box_col_start, num):
+            return True
+        return False
 
     '''
     Fills the specified 3x3 box with values
