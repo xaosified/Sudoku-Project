@@ -27,7 +27,7 @@ class SudokuGenerator:
         self.row_length = row_length
         self.removed_cells = removed_cells
         #This may be wrong VVVV
-        self.board = self.get_board()
+        self.board = [[0 for i in range(self.row_length)] for j in range(self.row_length)]
         self.box_length = int(math.sqrt(self.row_length))
 
     '''
@@ -37,7 +37,7 @@ class SudokuGenerator:
 	Return: list[list]
     '''
     def get_board(self):
-        return [[0 for i in range(self.row_length)] for j in range(self.row_length)]
+        return [[self.board[j][i] for i in range(self.row_length)] for j in range(self.row_length)]
 
     '''
 	Displays the board to the console
@@ -205,7 +205,7 @@ class SudokuGenerator:
     Provided for students
     Constructs a solution by calling fill_diagonal and fill_remaining
 
-	Parameters: None
+    	Parameters: None
 	Return: None
     '''
     def fill_values(self):
