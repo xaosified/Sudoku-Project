@@ -62,6 +62,15 @@ def main():
                                 board.place_number(board.selected_cell.sketched_value)
                             elif event.key == pygame.K_BACKSPACE: #deletes value in cell
                                 board.clear()
+                            if event.key == pygame.K_UP: #moves up 
+                                col = (col - 1) % 9
+                            elif event.key == pygame.K_DOWN: #moves down 
+                                col = (col + 1) % 9
+                            elif event.key == pygame.K_LEFT: #moves left
+                                row = (row - 1) % 9
+                            elif event.key == pygame.K_RIGHT: #moves right
+                                row = (row + 1) % 9
+                            board.select(row, col) #updates the selected cel
                 if board.is_full():
                     if board.check_board():
                         end_screen.display(True)

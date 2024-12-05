@@ -125,7 +125,6 @@ class Board:
             return (col, row)
         return None
 
-
     #The rest of the methods should follow the instructions. Good Luck!
 
     def clear(self):
