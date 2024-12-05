@@ -28,7 +28,7 @@ class SudokuGenerator:
         self.removed_cells = removed_cells
         #This may be wrong VVVV
         self.board = self.get_board()
-        self.box_length = math.sqrt(self.row_length)
+        self.box_length = int(math.sqrt(self.row_length))
 
     '''
 	Returns a 2D python list of numbers which represents the board
@@ -47,7 +47,7 @@ class SudokuGenerator:
 	Return: None
     '''
     def print_board(self):
-        for i in range(len(self.board)-1):
+        for i in range(len(self.board)):   #Removed -1 from self.board because it causes the last row would be cut off in the board printed to the console
             for j in range(len(self.board[i])):
                 print(self.board[i][j], end=' ')
             print()
@@ -142,7 +142,12 @@ class SudokuGenerator:
 	Return: None
     '''
     def fill_box(self, row_start, col_start):
-        pass
+        numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+        for i in range(3):
+            for j in range(3):
+                random_num = random.choice(numbers)
+                numbers.remove(random_num)
+                self.board[row_start + i][col_start + j] = random_num
     
     '''
     Fills the three boxes along the main diagonal of the board
@@ -152,7 +157,9 @@ class SudokuGenerator:
 	Return: None
     '''
     def fill_diagonal(self):
-        pass
+        for i in range(3):
+            start_coordinate = i * 3
+            self.fill_box(start_coordinate, start_coordinate)
 
     '''
     DO NOT CHANGE
@@ -218,8 +225,13 @@ class SudokuGenerator:
 	Return: None
     '''
     def remove_cells(self):
-        pass
-
+        number_to_remove = 0
+        while number_to_remove < self.removed_cells:
+            random_row = random.randint(0, self.row_length - 1)
+            random_col = random.randint(0, 8)
+            if self.board[random_row][random_col] != 0:
+                self.board[random_row][random_col] = 0
+                number_to_remove += 1
 
 '''
 DO NOT CHANGE
